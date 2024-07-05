@@ -57,4 +57,34 @@ FROM orders
 GROUP BY order_date, YEAR(order_date), MONTH(order_date), DAY(order_date)
 ORDER BY order_date;
 
+-- Número de pedidos por mes y año: agrupe los pedidos por cada mes concreto de cada año.
+SELECT order_date,
+       COUNT(order_id) AS num_orders,
+       YEAR(order_date) AS anio,
+       MONTH(order_date) AS mes
+FROM orders
+GROUP BY order_date, YEAR(order_date), MONTH(order_date)
+ORDER BY order_date;
+
+-- Seleccionad las ciudades con 4 o más empleadas: Desde recursos humanos nos piden seleccionar los nombres de las ciudades con 4 o más 
+-- empleadas de cara a estudiar la apertura de nuevas oficinas.
+SELECT * FROM northwind.employees;
+
+SELECT city, COUNT(employee_id)
+FROM employees
+GROUP BY city, employee_id
+HAVING  COUNT(employee_id) >= 4;
+
+-- Cread una nueva columna basándonos en la cantidad monetaria: Necesitamos una consulta que clasifique los pedidos en dos categorías 
+-- ("Alto" y "Bajo") en función de la cantidad monetaria total que han supuesto: por encima o por debajo de 2000 euros.
+SELECT * FROM northwind.order_details;
+
+SELECT order_id, (unit_price * quantity) AS beneficio,
+    CASE
+        WHEN (unit_price * quantity) < 2000 THEN 'BAJO'
+        WHEN (unit_price * quantity) > 2000 THEN 'ALTO'
+        ELSE 'MEDIO'
+    END AS rango_beneficio
+FROM 
+    order_details;
 
